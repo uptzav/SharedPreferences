@@ -7,7 +7,10 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,7 +29,10 @@ public class SecondActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private  TextView txt_home;
 
-
+    private SharedPreferences prefs;
+    private String prefName = "Mypreferences";
+    private static final String KEY_FONT_SIZE = "font";
+    private static final String KEY_TEXT_VALUE = "text";
 
     Button mRedColor;
     Button mGreenColor;
@@ -47,6 +53,10 @@ public class SecondActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final EditText edit = (EditText) findViewById(R.id.editText1);
+        final SeekBar seek = (SeekBar) findViewById(R.id.seekBar1);
+        final TextView tv = (TextView) findViewById(R.id.textView2);
+        Button ok = (Button) findViewById(R.id.button1);
 
         mRedColor = (Button) findViewById(R.id.btnRed);
         mGreenColor = (Button) findViewById(R.id.btnGreen);
@@ -57,6 +67,52 @@ public class SecondActivity extends AppCompatActivity {
         mCelesteColor = (Button) findViewById(R.id.btnCeleste);
         mTurqColor = (Button) findViewById(R.id.btnTurq);
         mBlackColor = (Button) findViewById(R.id.btnBlack);
+
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                prefs = getSharedPreferences(prefName, MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putFloat(KEY_FONT_SIZE, edit.getTextSize());
+                editor.putString(KEY_TEXT_VALUE, edit.getText().toString());
+                editor.commit();
+                Toast.makeText(getBaseContext(),
+                        "Size of the font is saved successfully",
+                        Toast.LENGTH_LONG).show();
+                tv.setText(edit.getText().toString());
+                tv.setTextSize(seek.getProgress());
+            }
+        });
+
+        SharedPreferences prefs = getSharedPreferences(prefName, MODE_PRIVATE);
+        float fontSize = prefs.getFloat(KEY_FONT_SIZE, 14);
+        seek.setProgress((int) fontSize);
+        edit.setText(prefs.getString(KEY_TEXT_VALUE, " "));
+        edit.setTextSize(seek.getProgress());
+
+
+
+        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                // TODO Auto-generated method stub
+                edit.setTextSize(progress);
+            }
+        });
+
+
+
 
         if(getColor() != getResources().getColor(R.color.colorPrimary)){
             toolbar.setBackgroundColor(getColor());

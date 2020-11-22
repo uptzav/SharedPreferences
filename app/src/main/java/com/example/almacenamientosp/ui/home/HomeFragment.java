@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment {
                 String name = mPreferences.getString(getString(R.string.name),"");
 
 
-                textView.setText(name);
+                textView.setText("Hola" +" "+name);
 
 
 
