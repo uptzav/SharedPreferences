@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SyncStateContract;
@@ -11,13 +12,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toolbar;
 
 import kotlin.io.ConstantsKt;
 
 
 public class MainActivity extends AppCompatActivity {
 
-  
+
+
 
     private  static  final String TAG = "MainActivity";
     private  SharedPreferences mPreferences;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         mUsuario =(EditText)findViewById(R.id.edt_usuario);
         mClave =(EditText)findViewById(R.id.edt_password);
         btnLogin =(Button) findViewById(R.id.btn_login);
@@ -44,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mEditor = mPreferences.edit();
+
+
+
+
+
+
+
+
 
         //TODO: revisar las preferencias
         checkSharedPreferences();
@@ -94,5 +107,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+private  void storeColor(int color){
+SharedPreferences mSharedPreferences = getSharedPreferences("ToolbarColor", MODE_PRIVATE);
+SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+mEditor.putInt("color", color);
+mEditor.apply();
+
+}
+
+private  int getColor(){
+        SharedPreferences mSharedPreferences = getSharedPreferences("ToolbarColor", MODE_PRIVATE);
+        int selectedColor = mSharedPreferences.getInt("color", getResources().getColor(R.color.colorPrimary));
+return selectedColor;
+}
 
 }
